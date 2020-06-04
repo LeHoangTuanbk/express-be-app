@@ -122,6 +122,10 @@ input.input-with-error {
   border: 1px solid red !important;
 }
 
+input[type="submit"]:hover {
+  cursor: pointer;
+}
+
 input[type=text] {
   background-color: #f6f6f6;
   border: none;

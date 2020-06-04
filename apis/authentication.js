@@ -12,8 +12,6 @@ router.post('/', async (req, res) => {
     isAdmin: true
   }})
 
-  console.log(person);
-
   if(person) {
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/plain');

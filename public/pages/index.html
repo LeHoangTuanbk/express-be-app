@@ -27,7 +27,7 @@
       <form method="post" id="login-form">
         <input type="text" id="username" class="fadeIn second" name="login" placeholder="Tên tài khoản"">
         <input type="text" id="password" class="fadeIn third" name="login" placeholder="Mật khẩu">
-        <input type="submit" class="fadeIn fourth" value="Đăng nhập">
+        <input type="submit" id="submit-button" class="fadeIn fourth" value="Đăng nhập">
       </form>
       <span style="height: 30px; color: brown; display: block;"></span>
   
@@ -44,10 +44,19 @@
       window.location.href = "/dashboard"
     }
 
+    let loading = false;
+
     $(document).ready(() => {
       $('#login-form').submit(e => {
         e.preventDefault()
+        if(loading) {
+          return
+        }
 
+        loading = true;
+
+        setTimeout(() => {
+          
         const username = $('#username').val()
         const password = $('#password').val()
 
@@ -61,6 +70,7 @@
             $('#password').addClass('input-with-error')
           }
 
+          loading = false;
           return;
         }
 
@@ -83,6 +93,9 @@
             $( "span" ).text("Tên tài khoản hoặc mật khẩu không đúng!").show().fadeOut( 5000 );
           }
         })
+
+        loading = false;
+        }, 1000000000);
       })
     })
   </script>
