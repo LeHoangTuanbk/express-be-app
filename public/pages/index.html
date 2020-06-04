@@ -24,11 +24,12 @@
       </div>
   
       <!-- Login Form -->
-      <form>
-        <input type="text" id="login" class="fadeIn second" name="login" placeholder="Tên tài khoản"">
+      <form method="post" id="login-form">
+        <input type="text" id="username" class="fadeIn second" name="login" placeholder="Tên tài khoản"">
         <input type="text" id="password" class="fadeIn third" name="login" placeholder="Mật khẩu">
         <input type="submit" class="fadeIn fourth" value="Đăng nhập">
       </form>
+      <span style="height: 30px; color: brown; display: block;"></span>
   
       <!-- Remind Passowrd -->
       <div id="formFooter">
@@ -39,6 +40,51 @@
   </div>
 
   <script>
+    if(localStorage.getItem("username") && localStorage.getItem("isAdmin") && localStorage.getItem("password")) {
+      window.location.href = "/dashboard"
+    }
+
+    $(document).ready(() => {
+      $('#login-form').submit(e => {
+        e.preventDefault()
+
+        const username = $('#username').val()
+        const password = $('#password').val()
+
+        if(!username || !password) {
+          $( "span" ).text( "Vui lòng điền đủ các trường!" ).show().fadeOut( 5000 );
+          if(!username) {
+            $('#username').addClass('input-with-error')
+          }
+
+          if(!password) {
+            $('#password').addClass('input-with-error')
+          }
+
+          return;
+        }
+
+        $('#username').removeClass('input-with-error')
+        $('#password').removeClass('input-with-error')
+
+        $.ajax({
+          method: 'POST',
+          url: '/api/auth',
+          data: JSON.stringify({ username, password }),
+          contentType: 'application/json',
+          success: () => {
+            localStorage.setItem("username", username)
+            localStorage.setItem("password", password)
+            localStorage.setItem("isAdmin", true)
+
+            window.location.href = "/dashboard"
+          },
+          error: () => {
+            $( "span" ).text("Tên tài khoản hoặc mật khẩu không đúng!").show().fadeOut( 5000 );
+          }
+        })
+      })
+    })
   </script>
 </body>
 </html>
