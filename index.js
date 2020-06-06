@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 
 const user = require('./apis/user')
-const auth = require('./apis/authentication')
+const auth = require('./apis/auth')
 
 require('dotenv').config()
 
@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000
 
 app.use(bodyParser.json());
 
-app.use('/api/auth', auth)
-app.use('/api/user', user)
+app.use('/auth', auth)
+app.use('/user', user)
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

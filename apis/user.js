@@ -4,8 +4,8 @@ const { User } = require('../models')
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-        const users = await User.findAll()
-        res.send(users)
+    const users = await User.findAll()
+    res.send(users)
 })
 
 router.get('/:cardId', async (req, res) => {
@@ -13,7 +13,7 @@ router.get('/:cardId', async (req, res) => {
 
     const user = await User.findByPk(cardId)
 
-    if(user) {
+    if (user) {
         res.send(user)
     } else {
         res.send(404)
@@ -21,13 +21,13 @@ router.get('/:cardId', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-        const user = await User.create(req.body)
-        res.send(user)
+    const user = await User.create(req.body)
+    res.send(user)
 })
 
-router.put('/:id', async (req, res) => {
-    const { id } = req.params
-    const { name, username, password, cardId, isAdmin } = req.body
+router.put('/:cardId', async (req, res) => {
+    const { cardId } = req.params
+    const { name, username, password, isAdmin } = req.body
     const user = await User.findByPk(cardId)
 
     if (!user) {
@@ -45,9 +45,9 @@ router.put('/:id', async (req, res) => {
 })
 
 
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params
-    const user = await User.findByPk(id)
+router.delete('/:cardId', async (req, res) => {
+    const { cardId } = req.params
+    const user = await User.findByPk(cardId)
 
     if (user) {
         await user.destroy()
