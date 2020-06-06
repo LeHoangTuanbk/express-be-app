@@ -20,8 +20,16 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/public/pages/index.html'))
 })
 
+app.get('/logout', (req, res) => {
+  res.sendFile(path.join(__dirname + '/public/pages/logout.html'))
+})
+
 app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/pages/dashboard.html'))
+  res.sendFile(path.join(__dirname + '/public/pages/dashboard/index.html'))
+})
+
+app.get('/dashboard/persons', (req, res) => {
+  res.sendFile(path.join(__dirname + '/public/pages/dashboard/persons.html'))
 })
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

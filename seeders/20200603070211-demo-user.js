@@ -2,20 +2,18 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Person', [{
+    return queryInterface.bulkInsert('Users', [{
       name: "Nguyen Thanh",
       username: "admin",
       password: "admin",
-      idCard: "12345",
+      cardId: "12345",
       isAdmin: true,
-      role: "admin",
+      email: "admin@gmail.com",
     }, {
       name: "Hoang Tuan",
       username: "admin1",
       password: "admin1",
-      idCard: "123453",
-      isAdmin: false,
-      role: "member"
+      cardId: "123453",
     }])
     /*
       Add altering commands here.
