@@ -24,8 +24,7 @@ router.post('/login', async (req, res) => {
     }
   
     const token = jwt.sign(jwt_obj, process.env.JWT_PRIVATE_KEY)
-  
-    res.send(token)
+    res.send({ token })
   }
 
   res.sendStatus(404)
