@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
         isAdmin: true
       }
     }
-  
+
     const token = jwt.sign(jwt_obj, process.env.JWT_PRIVATE_KEY)
     res.send({ token })
   }
