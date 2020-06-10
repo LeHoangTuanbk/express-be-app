@@ -1,6 +1,7 @@
 const express = require('express')
 const { User } = require('../models')
 const { checkAdmin } = require('../middwares/auth')
+const { isDubUserInfo } = require('../middwares/utils')
 
 const router = express.Router()
 
@@ -21,12 +22,12 @@ router.get('/:cardId', checkAdmin, async (req, res) => {
     }
 })
 
-router.post('/', checkAdmin, async (req, res) => {
+router.post('/', [checkAdmin, isDubUserInfo], async (req, res) => {
     const user = await User.create(req.body)
     res.send(user)
 })
 
-router.put('/:cardId', checkAdmin, async (req, res) => {
+router.put('/:cardId', [checkAdmin, isDubUserInfo], async (req, res) => {
     const { cardId } = req.params
     const { name, username, password, isAdmin } = req.body
     const user = await User.findByPk(cardId)
