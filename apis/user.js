@@ -1,4 +1,7 @@
 const express = require('express')
+const jwt = require('jsonwebtoken');
+const { Op } = require("sequelize");
+
 const { User } = require('../models')
 const { checkAdmin } = require('../middwares/auth')
 const { isDubUserInfo } = require('../middwares/utils')
@@ -6,7 +9,23 @@ const { isDubUserInfo } = require('../middwares/utils')
 const router = express.Router()
 
 router.get('/', checkAdmin, async (req, res) => {
-    const users = await User.findAll()
+    const token = req.header('Bearer')
+
+    const payload = await jwt.verify(token, process.env.JWT_PRIVATE_KEY)
+    const { data } = payload
+
+    const user = await User.findOne({
+        where: data
+    })
+
+    const users = await User.findAll({
+        where: {
+            cardId: {
+                [Op.notIn]: [user.cardId]
+            }
+        }
+    })
+
     res.send(users)
 })
 
@@ -27,10 +46,11 @@ router.post('/', [checkAdmin, isDubUserInfo], async (req, res) => {
     res.send(user)
 })
 
-router.put('/:cardId', [checkAdmin, isDubUserInfo], async (req, res) => {
+router.put('/:cardId', [checkAdmin], async (req, res) => {
     const { cardId } = req.params
-    const { name, username, password, isAdmin } = req.body
-    const user = await User.findByPk(cardId)
+    const { name, username, password, isAdmin, cardId: cardIdBody, email } = req.body
+
+    let user = await User.findByPk(cardId, { raw: true })
 
     if (!user) {
         res.send(404)
@@ -39,11 +59,40 @@ router.put('/:cardId', [checkAdmin, isDubUserInfo], async (req, res) => {
     user.name = name
     user.username = username
     user.password = password
-    user.idCard = idCard
+    user.cardId = cardIdBody
     user.isAdmin = isAdmin
+    user.email = email
 
-    await User.save()
-    res.send(user)
+    try {
+        await User.update(user, {
+            where: {
+                cardId
+            }
+        })
+        res.send(user)
+    } catch (error) {
+        // erro example: error = {
+        //     errors: [
+        //          {
+        //           message: 'Users.PRIMARY must be unique',
+        //           type: 'unique violation',
+        //           path: 'Users.PRIMARY',
+        //           value: '12345',
+        //           origin: 'DB',
+        //           instance: null,
+        //           validatorKey: 'not_unique',
+        //           validatorName: null,
+        //           validatorArgs: []
+        //         }
+        //       ]
+        // }
+        console.log(error.errors[0]);
+        res.status(400).send({ code: error.errors[0].path + '-' + error.errors[0].validatorKey })
+    } finally {
+
+        // if catch block have exeption
+        res.status(500).send({ code: 'sever-error' })
+    }
 })
 
 
