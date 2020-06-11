@@ -2,10 +2,12 @@ const { User } = require('../models')
 
 const isDubUserInfo = async (req, res, next) => {
   const { email, username } = data.body
+  const { cardId } = req.params
 
   if (username) {
     const user = await User.findOne({
       where: {
+        cardId,
         username,
       }
     })
@@ -18,6 +20,7 @@ const isDubUserInfo = async (req, res, next) => {
   if (email) {
     const user = await User.findOne({
       where: {
+        cardId,
         email,
       }
     })
