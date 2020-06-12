@@ -7,7 +7,7 @@ module.exports = {
       cardId: {
         allowNull: false,
         primaryKey: true,
-        type: STRING,
+        type: STRING(30).BINARY,
         references: {
           model: {
             tableName: 'Users',
@@ -18,7 +18,7 @@ module.exports = {
       unclock_date: {
         allowNull: false,
         primaryKey: true,
-        type: STRING,
+        type: STRING(30).BINARY,
       }
     });
   },

@@ -5,11 +5,11 @@ module.exports = {
     const { BOOLEAN, STRING } = Sequelize
     
     return queryInterface.createTable('Users', {
-      cardId: { type: STRING, primaryKey: true },
+      cardId: { type: STRING(30).BINARY, primaryKey: true },
       name: { type: STRING(30), allowNull: false },
-      username: { type: STRING(255), allowNull: false, unique: true },
+      username: { type: STRING(150), allowNull: false, unique: true },
       password: { type: STRING(255), allowNull: false },
-      email: { type: STRING(255), unique: true, allowNull: true },
+      email: { type: STRING(150), unique: true, allowNull: true },
       isAdmin: { type: BOOLEAN, defaultValue: false, allowNull: true },
     });
   },

@@ -5,21 +5,24 @@ const isDubUserInfo = async (req, res, next) => {
 
   let user = null
 
-  user = await User.findOne({
-    where: {
-      username,
-    }
-  })
+
+  if (username)
+    user = await User.findOne({
+      where: {
+        username,
+      }
+    })
 
   if (user) {
     res.status(400).send({ code: 'username-dub' })
   }
 
-  user = await User.findOne({
-    where: {
-      email
-    }
-  })
+  if (email) 
+    user = await User.findOne({
+      where: {
+        email
+      }
+    })
 
   if (user) {
     res.status(400).send({ code: 'email-dub' })

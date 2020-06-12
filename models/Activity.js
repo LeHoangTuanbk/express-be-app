@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     cardId: {
       allowNull: false,
       primaryKey: true,
-      type: STRING,
+      type: STRING(30).BINARY,
       references: {
         model: {
           tableName: 'Users',
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     unclock_date: {
       allowNull: false,
       primaryKey: true,
-      type: STRING,
+      type: STRING(30).BINARY,
     }
   }, {
     freezeTableName: true,
