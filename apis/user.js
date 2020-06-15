@@ -1,6 +1,4 @@
 const express = require('express')
-const jwt = require('jsonwebtoken');
-const { Op } = require("sequelize");
 
 const { User } = require('../models')
 const { checkAdmin } = require('../middwares/auth')
@@ -9,22 +7,9 @@ const { isDubUserInfo } = require('../middwares/utils')
 const router = express.Router()
 
 router.get('/', checkAdmin, async (req, res) => {
-    const token = req.header('Bearer')
-
-    const payload = await jwt.verify(token, process.env.JWT_PRIVATE_KEY)
-    const { data } = payload
-
-    const user = await User.findOne({
-        where: data
-    })
-
-    const users = await User.findAll({
-        where: {
-            cardId: {
-                [Op.notIn]: [user.cardId]
-            }
-        }
-    })
+    const users = await User.findAll({ where: {
+        status: true
+    }})
 
     res.send(users)
 })
@@ -95,6 +80,33 @@ router.put('/:cardId', [checkAdmin], async (req, res) => {
     }
 })
 
+
+router.delete('/:cardId/deactive', checkAdmin, async (req, res) => {
+    const { cardId } = req.params
+
+    let user = await User.findByPk(cardId, { raw: true })
+
+    if (!user) {
+        res.send(404)
+    }
+
+    user.status = false
+
+    try {
+        await User.update(user, {
+            where: {
+                cardId
+            }
+        })
+        res.send(user)
+    } catch (error) {
+        res.status(400).send({ code: error.errors[0].path + '-' + error.errors[0].validatorKey })
+    } finally {
+        res.status(500).send({ code: 'sever-error' })
+    }
+
+    res.status(200).send()
+})
 
 router.delete('/:cardId', checkAdmin, async (req, res) => {
     const { cardId } = req.params
