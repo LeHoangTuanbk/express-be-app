@@ -17,6 +17,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: STRING,
+    },
+    type: {
+      type: Sequelize.STRING,
+      allowNull: true,
+      default: 'RFID'
     }
   }, {
     tableName: 'Activities',
