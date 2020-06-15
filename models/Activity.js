@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const { STRING } = DataTypes
 
-  const Activity = sequelize.define('Activities', {
+  const Activity = sequelize.define('Activity', {
     cardId: {
       allowNull: false,
       primaryKey: true,
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       type: STRING,
     }
   }, {
-    freezeTableName: true,
+    tableName: 'Activities',
     timestamps: false,
   });
 
