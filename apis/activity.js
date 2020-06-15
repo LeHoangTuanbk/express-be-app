@@ -15,25 +15,16 @@ router.get('/', checkAdmin, async (req, res) => {
 router.get('/:cardId', checkAdmin, async (req, res) => {
   const { cardId } = req.params
 
-  User.hasMany(Activity, {
-    foreignKey: 'cardId'
-  })
+  const users = await User.findByPk(cardId, { raw: true })
 
-  Activity.belongsTo(User, {
-    foreignKey: 'cardId'
-  })
+  const activities = await Activity.findAll({ where: {
+    cardId
+  }, raw: true })
 
-  const users = await User.findByPk(cardId, {
-    raw: true,
-    include: [{
-      model: Activity,
-      where: {
-        cardId
-      }
-    }]
+  res.send({
+    ...users,
+    activities
   })
-
-  res.send(users)
 })
 
 module.exports = router

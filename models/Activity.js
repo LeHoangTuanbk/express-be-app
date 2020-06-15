@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       type: STRING,
     },
     type: {
-      type: Sequelize.STRING,
+      type: STRING,
       allowNull: true,
       default: 'RFID'
     }

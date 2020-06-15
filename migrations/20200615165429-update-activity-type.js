@@ -5,7 +5,7 @@ module.exports = {
     return queryInterface.addColumn('Activities', 'type', {
       type: Sequelize.STRING,
       allowNull: true,
-      default: 'RFID'
+      defaultValue: 'RFID'
     })
   },
 
