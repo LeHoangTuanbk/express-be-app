@@ -1,4 +1,6 @@
 const express = require('express')
+const http = require('http')
+
 const { Activity, User } = require('../models')
 const { checkAdmin } = require('../middwares/auth')
 
@@ -25,6 +27,33 @@ router.get('/:cardId', checkAdmin, async (req, res) => {
     ...users,
     activities
   })
+})
+
+setResult = result => {
+  return result;
+}
+
+router.post('/web', async (req, res) => { 
+  const { cardId } = req.body
+ 
+  const opt = {
+    host: process.env.NODEMCU_HOST,
+    path: '/unlock',
+    port: '80',
+    method: 'POST'
+  }; 
+
+  const MCUreq = http.request(opt, async response => {
+    if(response && response.statusCode === 200) {
+      const activity = await Activity.create({ cardId, unclock_date: new Date().toISOString(), type: "WEB" })
+      res.send(activity)
+    } else {
+      res.send(400)
+    }
+  })
+
+  MCUreq.write("")
+  MCUreq.end()
 })
 
 module.exports = router
