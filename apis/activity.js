@@ -46,7 +46,7 @@ router.post('/web', async (req, res) => {
   const MCUreq = http.request(opt, async response => {
     if(response && response.statusCode === 200) {
       const activity = await Activity.create({ cardId, unclock_date: new Date().toISOString(), type: "WEB" })
-      res.send(activity)
+      res.send(200)
     } else {
       res.send(400)
     }
@@ -55,5 +55,46 @@ router.post('/web', async (req, res) => {
   MCUreq.write("")
   MCUreq.end()
 })
+
+router.post('/voice', async (req, res) => { 
+  const cardId  = "12345" 
+  //console.log("voice")
+  const opt = {
+    host: process.env.NODEMCU_HOST,
+    path: '/unlock',
+    port: '80',
+    method: 'POST'
+  }; 
+
+  const MCUreq = http.request(opt, async response => {
+    if(response && response.statusCode === 200) {
+      const activity = await Activity.create({ cardId, unclock_date: new Date().toISOString(), type: "VOICE" })
+      res.send(200)
+    } else {
+      res.send(400)
+    }
+  })
+
+  MCUreq.write("")
+  MCUreq.end()
+})
+
+router.post('/rfid', async (req, res) => { 
+  const cardId  = req.body
+  console.log(cardId);
+  let user = await User.findByPk(cardId, { raw: true })
+
+    if (!user) {
+        res.send(404)
+    }
+    else {
+      const activity = await Activity.create({ cardId, unclock_date: new Date().toISOString(), type: "RFID" })
+      res.send(200)
+    }
+  
+  
+})
+
+
 
 module.exports = router
