@@ -12,14 +12,10 @@ const { Activity, User } = require('./models')
 const app = express()
 
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
-
 
 const port = process.env.PORT || 3000
 
 require('dotenv').config()
-
-require('./io')(io)
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
